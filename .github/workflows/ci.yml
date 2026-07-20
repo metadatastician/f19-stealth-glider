@@ -1,0 +1,49 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+name: ci
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  ledger:
+    name: verification ledger
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Licence headers present on every source file
+        run: |
+          set -euo pipefail
+          fail=0
+          for f in src/*.mjs src/*.js; do
+            if [ "$(head -1 "$f")" != "// SPDX-License-Identifier: AGPL-3.0-or-later" ]; then
+              echo "::error file=$f::missing SPDX AGPL header"; fail=1
+            fi
+          done
+          [ "$fail" = 0 ]
+
+      - name: Verification ledger (verify1,2,3,8,9 + build)
+        working-directory: src
+        run: |
+          set -euo pipefail
+          for v in verify1 verify2 verify3 verify8 verify9; do
+            echo "== node $v.mjs =="
+            node "$v.mjs"
+          done
+          echo "== node build.mjs =="
+          node build.mjs
+
+      - name: Bundle reproducibility — committed HTML matches a fresh rebuild
+        run: |
+          set -euo pipefail
+          # build.mjs (run above, from src/) wrote src/f19-stealth-glider.html
+          if ! diff -q src/f19-stealth-glider.html f19-stealth-glider.html; then
+            echo "::error::committed f19-stealth-glider.html is stale — run 'just build' and commit"
+            diff <(head -c 400 src/f19-stealth-glider.html) <(head -c 400 f19-stealth-glider.html) || true
+            exit 1
+          fi
+          echo "bundle is reproducible and up to date"
