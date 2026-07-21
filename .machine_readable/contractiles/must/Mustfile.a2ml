@@ -57,6 +57,17 @@ generic template.
 - severity: critical
 - notes: The RSR template specifies GOVERNANCE.adoc / MAINTAINERS.adoc; older estate repos use .md / extensionless. Either satisfies this probe.
 
+### readme-trio-present
+- description: The README / EXPLAINME / AFFIRMATION trio exists
+- run: test -f README.md && test -f EXPLAINME.adoc && test -f AFFIRMATION.adoc
+- severity: warning
+- notes: Three tenses. README is aspirational, EXPLAINME is mechanism, AFFIRMATION is a frozen falsifiable instant. The third is the one that decays — it names a commit SHA and is a draft once HEAD moves past it.
+
+### audit-and-changelog-present
+- description: AUDIT.adoc and CHANGELOG.md exist
+- run: test -f AUDIT.adoc && test -f CHANGELOG.md
+- severity: warning
+
 ### hygiene-config
 - description: .editorconfig and .gitattributes must exist
 - run: test -f .editorconfig && test -f .gitattributes

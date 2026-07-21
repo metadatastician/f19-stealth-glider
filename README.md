@@ -50,6 +50,7 @@ asserts the committed `f19-stealth-glider.html` is byte-identical to a fresh reb
 | [`ARCHITECTURE.md`](./ARCHITECTURE.md) | How the four modules fit together, and why the seams are where they are. |
 | [`EXPLAINME.adoc`](./EXPLAINME.adoc) | Each claim mapped to the file and command that backs it — with the caveats. |
 | [`AUDIT.adoc`](./AUDIT.adoc) | What is verified, what is merely argued, and what is *not* claimed. |
+| [`AFFIRMATION.adoc`](./AFFIRMATION.adoc) | What was checkably true at one stamped commit — including what is *not* affirmed. |
 | [`CONTRIBUTING.md`](./CONTRIBUTING.md) | How to work on this without accidentally destroying the premise. |
 | [`GOVERNANCE.adoc`](./GOVERNANCE.adoc) | The design invariants, and why they outrank taste. |
 | [`SECURITY.md`](./SECURITY.md) | The (deliberately small) threat model, and how to report an issue. |
