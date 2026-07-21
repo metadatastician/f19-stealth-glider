@@ -141,27 +141,27 @@ Not present. The project is a single level; decisions `D-01`..`D-10` are
 recorded in `.machine_readable/descriptiles/META.a2ml`, each with the evidence
 that settled it. Promote to a `docs/adr/` tree when a second level exists.
 
-Cryptographically signed commits::
-The template's Mustfile makes `signed-commits` a *critical* rule, probed with
-`git verify-commit HEAD`. *That probe would fail on this repository.* Commits
-here carry a DCO 1.1 sign-off (`git commit -s`) but are not cryptographically
-verifiable, and this repo's Trustfile deliberately encodes the weaker
-`dco-signoff` check at `warning` severity instead. This is a real deviation from
-a critical template rule, recorded here rather than left to look like an
-oversight. The cause is estate-wide and not fixable from inside this repository:
-the estate signs with SSH (`gpg.format=ssh`) but the key was never registered
-with GitHub as a *Signing Key*, so every estate commit reads "Unverified"
-regardless of local `%G?`. Registering that key is the fix, and it is an
-account-level action. Note the contrast visible in this repo's own history:
-the Dependabot and merge commits GitHub created are signed; the ones authored
-locally are not.
-
 Capability-gated scaffolding::
 `abi.ipkg`, `src/interface/`, `verification/proofs/`, `container/`,
 `build/guix.scm`, `benches/` are all absent and correctly so — this repository
 declares none of the capabilities that gate them. Declaring a capability it does
 not carry would score it against a module it does not have, and would
 manufacture both false gaps and false credit.
+
+=== Rules checked and found already met
+
+Recorded because "compliant" should name what was actually tested, not just what
+was added.
+
+`signed-commits` (template Mustfile, *critical*)::
+Met. `git verify-commit HEAD` passes — commits are SSH-signed (ED25519,
+`gpg.format=ssh`) and additionally carry a DCO 1.1 sign-off. GitHub's API also
+reports `verification.verified = true` with reason `valid` for them, so local
+and forge-side verification agree. This was checked rather than assumed: an
+earlier draft of this document asserted the opposite, on the strength of a
+prior estate-wide observation that commits read "Unverified" on GitHub. Running
+the check disproved it. The claim was corrected before release, which is the
+behaviour the rest of this file demands.
 
 === Defects found upstream while doing this work
 

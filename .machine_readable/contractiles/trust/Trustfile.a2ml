@@ -91,6 +91,12 @@ destroy the project's entire premise without breaking anything visible.
 
 ## Provenance
 
+#### commit-signed
+- description: HEAD commit carries a valid cryptographic signature
+- run: "git verify-commit HEAD >/dev/null 2>&1"
+- severity: warning
+- notes: Verified as passing — commits are SSH-signed (ED25519) and GitHub reports verification.verified=true. Kept at `warning` rather than `critical` only because a CI checkout has no allowed_signers file, so the probe cannot resolve the key there; it is a hard check locally.
+
 #### dco-signoff
 - description: HEAD commit is signed off (DCO 1.1 — git commit -s)
 - run: "git log -1 --format='%b' | grep -qiE 'Signed-off-by:'"
