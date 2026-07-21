@@ -1,0 +1,69 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# Publish the playable bundle to GitHub Pages.
+#
+# The game is a single self-contained HTML file with no dependencies, so the
+# "site" is that file served as index.html. There is no static-site generator
+# involved and nothing to build beyond what CI already verifies.
+#
+# Two things this workflow does NOT do, deliberately:
+#   * It does not regenerate the bundle. ci.yml already asserts the committed
+#     f19-stealth-glider.html is byte-identical to a fresh rebuild, so publishing
+#     the committed file publishes exactly the artefact that was verified.
+#   * It does not run on pull requests. Deploying a PR to the live site would
+#     publish unreviewed content.
+#
+# Every `uses:` is pinned to a full commit SHA: the org enforces
+# sha_pinning_required, and a tag ref produces startup_failure at 0s — a check
+# that never runs, which reads as absence rather than failure.
+
+name: pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never cancel an in-flight deployment; let it finish and queue the next.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: assemble site
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Assemble the site from the committed bundle
+        run: |
+          set -euo pipefail
+          test -f f19-stealth-glider.html
+          mkdir -p _site
+          cp f19-stealth-glider.html _site/index.html
+          cp f19-stealth-glider.html _site/f19-stealth-glider.html
+          # Bypass Jekyll — this is a plain static file, not a Jekyll source tree.
+          touch _site/.nojekyll
+          echo "site assembled ($(wc -c < _site/index.html) bytes)"
+
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
+        with:
+          path: _site
+
+  deploy:
+    name: deploy to github-pages
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

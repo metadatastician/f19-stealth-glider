@@ -1,5 +1,6 @@
 node_modules/
 /tmp/
+_site/
 src/f19-stealth-glider.html
 *.log
 .DS_Store

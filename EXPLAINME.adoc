@@ -1,0 +1,153 @@
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// Copyright (c) 2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+= F19 Stealth Glider — Explainme
+:toc:
+:toclevels: 2
+:icons: font
+
+This file maps the project's *claims* to the *files and commands that back
+them*. The README says where this is going and why; this file says how it is
+built and what the evidence is.
+
+Each section states a claim, then how it is implemented, then — importantly —
+the caveat.
+
+== The substrate is a real cellular automaton, not scenery
+
+Claim::
+Every hazard in the game is a genuine B3/S23 Life pattern evolving under the
+same rule as the rest of the field. Nothing is scripted.
+
+How this is implemented::
+* `src/engine.mjs` implements one `step` function — born on exactly three live
+  neighbours, survives on two or three — applied uniformly across the grid.
+  There is no entity table, no per-cell exception, and no movement path.
+* The threats are named, standard Life objects from the pattern library `P`: a
+  Gosper glider gun, `eater1` absorbers, and still lifes.
+* Glider kinematics are *derived* rather than tabulated: `deriveGlider()` evolves
+  an actual glider and asserts period 4 with `(1,1)` displacement before
+  `gliderTables()` mirrors it into four headings. Hand-written tables would be a
+  place for the code and the substrate to silently diverge.
+
+Caveat::
+The project admits *exactly one* fiction: a pre-contact kinematic overlay for
+the player's glider. It is declared in the README, in `VERIFICATION.md`, and in
+`ANCHOR.a2ml`. It is valid only while the player is provably independent of the
+substrate — Chebyshev separation ≥ 3 — and the shipped contact rule fires at
+radius 2, comfortably inside that bound.
+
+== The stream cannot be crossed, and that is a result rather than a limitation
+
+Claim::
+A glider cannot cleanly cross the settled period-30 stream at *any* of the 30
+launch phases. The cause is geometry, not timing.
+
+How this is implemented::
+* `src/verify8.mjs` sweeps all 30 launch phases against a lone gun with a
+  north-east crossing glider, and measures minimum Chebyshev distance per phase.
+  It uses *no proximity rule at all* — true cell-overlap only — so the result
+  cannot be an artefact of the mission layer's contact radius.
+* Result: 21 of 30 phases reach distance 0 (outright overlap); the remaining 9
+  reach exactly 1 (adjacency, which annihilates both patterns on the next
+  generation); 0 of 30 reach 2 or more.
+* The arithmetic behind it: stream gliders sit roughly 15 units apart, and a
+  perpendicular crosser needs roughly 17 units of clear corridor. 15 < 17, so no
+  phase gap is ever wide enough.
+* Recorded as claim #4 in `VERIFICATION.md` and as a closed question in
+  `descriptiles/STATE.a2ml` under `[settled-questions]`.
+
+Caveat::
+The sweep is exhaustive for *perpendicular diagonal* crossings of a settled p30
+stream. Generality beyond that geometry rests on the spacing argument, which is
+arithmetic but is prose arithmetic — not a machine-checked proof. `AUDIT.adoc`
+states this distinction explicitly.
+
+Run it yourself::
++
+[source,console]
+----
+$ cd src && node verify8.mjs
+----
+
+== The shipped artefact is the verified artefact
+
+Claim::
+The `f19-stealth-glider.html` you download is exactly the code that was
+verified — not a rebuild that might differ.
+
+How this is implemented::
+* `src/build.mjs` concatenates `engine + mission + level + ui`, strips
+  `import`/`export`, and wraps the result in a single HTML file.
+* It then *replays the witness route on the transformed core* and asserts
+  `LANDED` with trace 0. A concatenation bug that broke gameplay fails the build
+  rather than reaching a player.
+* CI additionally diffs the committed HTML against a fresh rebuild and fails on
+  any difference, so a stale bundle cannot be merged.
+
+Caveat::
+This proves the bundle matches the source and remains completable. It is not a
+reproducible-build guarantee in the Guix sense, and this repository does not
+declare the `reproducible-build` capability.
+
+== The verification claims are runnable, not assertions
+
+Claim::
+Every row of the ledger is discharged by a named script that anyone can run.
+
+How this is implemented::
+* `VERIFICATION.md` is a table of 11 claims, each citing a script in `src/`.
+* Each runs with a bare `node`, needs no arguments, no fixtures, and no network.
+* CI runs the cited subset — `verify1`, `2`, `3`, `8`, `9`, and `build` — on
+  every push and fails on any red.
+
+Caveat::
+`verify4`, `5`, `6`, `7` and `10` are *exploratory design searches* and are
+deliberately excluded from CI. Their "no viable candidate" output is the
+finding; turning the build red for a correctly-reported negative result would
+teach exactly the wrong lesson. `just verify-all` runs everything.
+
+Caveat 2::
+One claim has already died in testing. An earlier sweep reported a second clean
+landing lane; it was an artefact of `stamp` silently absorbing out-of-bounds
+writes. `stamp` now throws, the corrected sweep finds exactly one clean lane, and
+the retraction is recorded in `VERIFICATION.md` rather than quietly removed.
+
+== The contractiles actually run
+
+Claim::
+The `.machine_readable/contractiles/` probes are executable checks, not prose.
+
+How this is implemented::
+* Every `- run:` line in the contractile set is a plain shell one-liner.
+* `scripts/contractiles.mjs` parses them out, executes each from the repository
+  root, and exits non-zero on any `critical` failure.
+* `just contracts` runs the set; CI runs it on every push.
+
+Caveat::
+The canonical contractile trident is `(Xfile.a2ml, x.ncl, x.k9.ncl)`. This
+repository ships only the `.a2ml` leg, because the Nickel runners are not built
+anywhere in the estate — shipping non-executable scaffolding is the exact
+false-green pattern these files exist to catch. The `INDEX.a2ml` registry records
+this substitution explicitly.
+
+Caveat 2::
+`Intentfile.a2ml` probes are informational, not gating. An unmet *intent* is a
+roadmap item, not a build failure.
+
+== The security posture is small because the project is small
+
+Claim::
+Zero dependencies, no network access, no server, no user data.
+
+How this is implemented::
+* `package.json` declares no `dependencies` and no `devDependencies`, and a
+  `critical` Mustfile probe fails the build if either key appears.
+* A Trustfile probe asserts the source contains no `fetch`, `XMLHttpRequest`,
+  `WebSocket`, or dynamic `import()`.
+* Every GitHub Action is pinned to a full commit SHA; a Mustfile probe rejects
+  tag refs, and the organisation rejects them at the platform level too.
+
+Caveat::
+"No network access" is enforced by a source-level pattern probe, which is a
+strong signal rather than a sandbox. The genuine guarantee is that the artefact
+is a single readable file with no minification — anyone can check it directly.

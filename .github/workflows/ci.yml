@@ -1,14 +1,36 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# The real gate for F19 Stealth Glider. Every step here can fail; none of them
+# is annotate-only. If you add a step, make sure it can actually go red — a
+# check that cannot fail is worse than no check, because it reads as coverage.
+#
+# ubuntu-latest ships Node 20 preinstalled and the project has zero
+# dependencies, so there is no setup-node and no install step. Every `uses:` is
+# pinned to a full commit SHA: the org enforces sha_pinning_required, and a tag
+# ref produces startup_failure at 0s — a check that never runs.
+#
+# Code scanning is NOT here: it runs via GitHub code-scanning default setup
+# (actions + javascript, extended suite, weekly). An advanced codeql.yml would
+# conflict with default setup and fail permanently.
+
 name: ci
 on:
   push:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   ledger:
     name: verification ledger
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       # ubuntu-latest ships Node 20 preinstalled; no setup-node needed.
@@ -19,7 +41,7 @@ jobs:
         run: |
           set -euo pipefail
           fail=0
-          for f in src/*.mjs src/*.js; do
+          for f in src/*.mjs src/*.js scripts/*.mjs; do
             if [ "$(head -1 "$f")" != "// SPDX-License-Identifier: AGPL-3.0-or-later" ]; then
               echo "::error file=$f::missing SPDX AGPL header"; fail=1
             fi
@@ -47,3 +69,53 @@ jobs:
             exit 1
           fi
           echo "bundle is reproducible and up to date"
+
+  contracts:
+    name: contractile probes
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      # Every `- run:` probe in .machine_readable/contractiles/ is a shell
+      # one-liner, so they are executed for real rather than read as prose.
+      # Fails the build on any `critical` breach.
+      - name: Execute the contractile probes
+        run: node scripts/contractiles.mjs
+
+      - name: SPDX identifier present on every .a2ml file
+        run: |
+          set -euo pipefail
+          fail=0
+          while IFS= read -r f; do
+            if ! head -3 "$f" | grep -q 'SPDX-License-Identifier:'; then
+              echo "::error file=$f::missing SPDX identifier"; fail=1
+            fi
+          done < <(find . -name '*.a2ml' -not -path './.git/*')
+          [ "$fail" = 0 ]
+
+      # Guards against the failure mode this repo hit on its first run: a tag
+      # ref is rejected by the org before the workflow starts, so it reports as
+      # startup_failure rather than as a red check.
+      - name: Every action is pinned to a full commit SHA
+        run: |
+          set -euo pipefail
+          if grep -rhoE 'uses: *[A-Za-z0-9_.-]+/[A-Za-z0-9_./-]+@[^ ]+' .github/workflows/ \
+             | grep -vE '@[0-9a-f]{40}$'; then
+            echo "::error::the above action refs are not pinned to a 40-character commit SHA"
+            exit 1
+          fi
+          echo "all action refs are SHA-pinned"
+
+      # "All documentation filled in" is checkable: no RSR substitution token
+      # may survive anywhere in the tree.
+      - name: No unsubstituted template placeholders
+        run: |
+          set -euo pipefail
+          # SHOUTY_SNAKE inside doubled braces. Deliberately narrower than a
+          # bare "{{": GitHub Actions expressions double braces too.
+          if grep -rlE '[{]{2}[A-Z][A-Z0-9_]*[}]{2}' --exclude-dir=.git . ; then
+            echo "::error::the files above still contain template placeholders"
+            exit 1
+          fi
+          echo "no template placeholders remain"

@@ -26,11 +26,14 @@ So Operation Nightstep does not ask you to cross the stream. The stream is the i
 
 ## Run it
 
-- **Play:** open `f19-stealth-glider.html` in a browser (self-contained, no dependencies).
+- **Play in your browser:** <https://metadatastician.github.io/f19-stealth-glider/>
+- **Play locally:** open `f19-stealth-glider.html` (self-contained, no server needed).
 - **Verify:** `just test` — runs the verification ledger and rebuilds the bundle.
+- **Check the contracts:** `just contracts` — executes the contractile probes.
 - **Rebuild the HTML:** `just build`.
 
-Node ≥ 18 (developed on Node 26). No dependencies.
+Node ≥ 18 (developed on Node 26). No dependencies — nothing to install.
+Without `just`, every script runs directly: `cd src && node verify8.mjs`.
 
 ## Verification
 
@@ -39,6 +42,29 @@ See [`VERIFICATION.md`](./VERIFICATION.md) for the full ledger. CI (`.github/wor
 runs the cited ledger (`verify1,2,3,8,9` + `build`) on every push and fails on any red, and
 asserts the committed `f19-stealth-glider.html` is byte-identical to a fresh rebuild.
 
+## Documentation
+
+| Document | What it answers |
+|---|---|
+| [`VERIFICATION.md`](./VERIFICATION.md) | The 11-claim ledger. Every claim cites a script you can run. **Start here.** |
+| [`ARCHITECTURE.md`](./ARCHITECTURE.md) | How the four modules fit together, and why the seams are where they are. |
+| [`EXPLAINME.adoc`](./EXPLAINME.adoc) | Each claim mapped to the file and command that backs it — with the caveats. |
+| [`AUDIT.adoc`](./AUDIT.adoc) | What is verified, what is merely argued, and what is *not* claimed. |
+| [`CONTRIBUTING.md`](./CONTRIBUTING.md) | How to work on this without accidentally destroying the premise. |
+| [`GOVERNANCE.adoc`](./GOVERNANCE.adoc) | The design invariants, and why they outrank taste. |
+| [`SECURITY.md`](./SECURITY.md) | The (deliberately small) threat model, and how to report an issue. |
+| [`CHANGELOG.md`](./CHANGELOG.md) | Including what was retracted. |
+
+Machine-readable metadata for agents lives in
+[`0-AI-MANIFEST.a2ml`](./0-AI-MANIFEST.a2ml) and `.machine_readable/`. The
+contractile probes there are **executable** — `just contracts` runs them, and
+CI fails on any critical breach.
+
 ## Licence
 
-[AGPL-3.0-or-later](./LICENSE). © 2026 Jonathan D.A. Jewell (hyperpolymath).
+[AGPL-3.0-or-later](./LICENSE) for code; `MPL-2.0` for the `.a2ml` metadata set;
+`CC-BY-SA-4.0` for documentation. Licence texts are vendored under
+[`LICENSES/`](./LICENSES). © 2026 Jonathan D.A. Jewell (hyperpolymath).
+
+Contributions are accepted under the Developer Certificate of Origin 1.1 —
+sign off with `git commit -s`.

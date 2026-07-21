@@ -1,0 +1,79 @@
+# SPDX-License-Identifier: MPL-2.0
+# 0-AI-MANIFEST.a2ml — Root AI manifest for F19 Stealth Glider
+
+## Purpose
+
+This is the root AI-assistant manifest for **F19 Stealth Glider**, a stealth
+puzzle ("Operation Nightstep") played on a live Conway's Game of Life field.
+Read this first, then `.machine_readable/6a2/STATE.a2ml`, then
+`VERIFICATION.md` — the last of those is the project's centre of gravity.
+
+The repository is small, dependency-free JavaScript (ESM, Node >= 18). There is
+no build system beyond `src/build.mjs`, no package registry dependency, and no
+runtime service. Everything interesting is in the geometry.
+
+## Where Things Live
+
+- `src/engine.mjs`  — the B3/S23 core: grid, `step`, RLE parse, the 8 symmetries,
+                      `stamp` (throws on out-of-bounds — deliberately), the named
+                      pattern library `P`, glider kinematics derivation, and the
+                      shadow-filtered `findGlider`.
+- `src/mission.mjs` — mission state: player overlay, contact rule, sensors, trace
+                      accounting, hangar splice, ambient stepping.
+- `src/level.mjs`   — **the frozen level**, "Operation Nightstep v2". Single source
+                      of truth for geometry. Do not tune it to make a test pass.
+- `src/ui.js`       — browser rendering + input; no gameplay truth.
+- `src/build.mjs`   — concatenates the four modules into the self-contained
+                      `f19-stealth-glider.html` and replays the witness on the
+                      *transformed* core.
+- `src/verify1..10.mjs` — verification scripts. **verify1, 2, 3, 8, 9 are the cited
+                      ledger** (CI runs them); 4, 5, 6, 7, 10 are exploratory
+                      design searches whose "no viable candidate" output is a
+                      finding, not a failure.
+- `VERIFICATION.md` — the 11-claim ledger, with honest disclosures. Authoritative.
+- `f19-stealth-glider.html` — the committed, playable bundle at the repo root.
+                      CI asserts it is byte-identical to a fresh rebuild.
+- `.machine_readable/` — this manifest's detail: `6a2/` (six core A2ML files)
+                      + `contractiles/` (executable, see below).
+
+## Machine-Readable Standard
+
+- `.machine_readable/6a2/`          — STATE, META, ECOSYSTEM, AGENTIC, NEUROSYM,
+                                      PLAYBOOK (+ README.adoc).
+- `.machine_readable/contractiles/` — Intentfile, Mustfile, Trustfile, Adjustfile,
+                                      Justfile, bust/Bustfile, dust/Dustfile.
+- `k9iser.toml`                     — wraps `package.json` into a self-validating
+                                      K9 contract (the only machine-parsable
+                                      config this repo has).
+
+**These contractiles are executable here, not decorative.** `scripts/contractiles.mjs`
+parses every `- run:` probe out of the Mustfile/Trustfile/Dustfile/Adjustfile and
+executes it; `just contracts` runs them and CI fails on any `critical` breach.
+If you add a probe, it must actually pass against this tree.
+
+## Invariants (read before editing)
+
+- **The substrate is B3/S23 and is never violated.** Born on exactly 3 live
+  neighbours, survives on 2 or 3. No special-cased cells, no scripted entities,
+  no "enemy" that is not a real Life pattern. This is the whole premise.
+- **The substrate must stay load-bearing, not scenery.** The standing falsifier:
+  *if the crossing becomes learnable by feel without reading phase, v0 fails its
+  premise.* Weakening the contact rule to make a route passable trips this — it
+  is a design failure, not a fix.
+- **`src/level.mjs` is frozen.** Geometry is the design. If a verification script
+  fails, the honest moves are to redesign the crossing or record the negative
+  result — not to retune lane offsets until the test goes green.
+- **The stream no-go lemma is settled, not open.** A glider cannot cleanly cross
+  the settled p30 stream at any of the 30 phases (0/30, `src/verify8.mjs`). The
+  cause is *geometry* — 15-unit glider spacing against a ~17-unit exclusion
+  diameter — not phase. Do not re-derive it; do not "fix" it by tuning the rule.
+- **`stamp` throwing on out-of-bounds is load-bearing.** It previously wrapped
+  silently and produced a phantom "second clean landing lane". Sweeps that need
+  negative lanes must enlarge the grid and co-shift the whole configuration
+  (Life is translation-invariant away from borders) — never relax `stamp`.
+- **The bundle is reproducible.** `f19-stealth-glider.html` must always equal a
+  fresh `just build`. CI enforces this byte-for-byte.
+- Licence is AGPL-3.0-or-later for all code. Every `src/*.mjs` and `src/*.js`
+  carries an SPDX header as its first line; CI enforces that too.
+- State/metadata belongs under `.machine_readable/`, not the repository root.
+  The root carries only `0-AI-MANIFEST.a2ml` and `k9iser.toml`.

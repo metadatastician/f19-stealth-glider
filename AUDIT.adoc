@@ -1,0 +1,189 @@
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// Copyright (c) 2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+= Audit Gate — F19 Stealth Glider
+v1.0, 2026-07-21
+:toc:
+:toclevels: 2
+:sectnums:
+
+== Purpose
+
+This root document exists so that humans and bots can see the repository's hard
+audit posture without first having to discover the `standards` repository.
+
+Canonical source documents live in the `standards` repository. This file is a
+repo-local audit gate summary, plus — more importantly — an explicit register of
+where this repository *knowingly deviates* from the RSR template, so that
+absence can be distinguished from oversight.
+
+== Hard rules
+
+* Do not call anything `stable`, `v1.0.0`, or a full release unless the stable
+  release gate has been passed end to end.
+* Papers, whitepapers, release notes, and READMEs must not outrun the proofs,
+  tests, or artefacts that support their claims.
+* Release paths must not ship with placeholders, stubs, `FIXME`, `XXX`, template
+  residue, fake fuzz, fake benches, or partial proof debt hidden as if it were
+  complete.
+* A skipped step is a failed step. A check that cannot fail is not a check.
+
+== Repo-specific hard rules
+
+These are stronger than the estate baseline, because this project's central
+claim is falsifiable and cheap to destroy accidentally:
+
+* *A claim without a runnable script is not a result.* Every row in
+  `VERIFICATION.md` cites a script that runs with plain `node`.
+* *Claims are quantified over all 30 launch phases,* never sampled.
+* *A crashing verification script is a harness bug, not a finding.* A script
+  that completes and reports "no viable candidate" _is_ a finding.
+* *Negative results are shipped, not deleted.* `verify4`, `5`, `6`, `7`, `10`
+  are retained precisely because they found nothing.
+* *Do not relax a rule to make a route passable.* See <<falsifier>>.
+
+[[falsifier]]
+== The standing falsifier
+
+____
+If the crossing becomes learnable by feel without reading the automaton's phase,
+the substrate is scenery and v0 fails its premise.
+____
+
+This is the audit criterion that matters most here, and the one no CI job can
+fully mechanise. It is the reason the Chebyshev-2 contact rule and the frozen
+level geometry are both listed as trust-deny areas: a change that widens either
+would make the game *feel better* while removing the reason it exists.
+
+Mechanising this — an automated solver that certifies a level is not learnable
+by feel — is recorded as the highest-value future work in `Intentfile.a2ml`.
+
+== What is actually verified, and what is not
+
+Stated plainly, because the distinction is easy to overstate:
+
+[cols="1,3", options="header"]
+|===
+| Status | Claim
+
+| *Verified empirically, exhaustively*
+| The stream no-go lemma (0/30 clean crossings across all 30 launch phases);
+  the fence-row passable-column theorem; level statics and stability over 1402
+  generations; completability of the witness route at all 30 launch ticks;
+  bundle reproducibility, byte-for-byte, at every build.
+
+| *Argued, not mechanically proved*
+| Generality of the no-go lemma beyond perpendicular diagonal crossings. The
+  spacing argument (15-unit glider spacing against a ~17-unit exclusion
+  diameter) is arithmetic, but it is prose arithmetic, not a machine-checked
+  proof.
+
+| *Declared, not proved*
+| That the level is unsolvable by feel. This is the standing falsifier and is
+  currently a design judgement backed by the no-go lemma, not a certificate.
+
+| *Explicitly NOT claimed*
+| Formal proof of anything. This repository declares no `formal-proofs`
+  capability in `rsr-profile.a2ml` and ships no mechanised proofs. Verification
+  here is exhaustive empirical sweep plus argued geometry — which is a real and
+  strong standard, and is not the same thing as proof.
+|===
+
+== Deliberate deviations from the RSR template
+
+Each item below is a conscious decision, not a gap. The machine-readable copy
+lives in `.machine_readable/rsr-profile.a2ml` under `[deliberate-deviations]`.
+
+=== Workflows not adopted
+
+`mirror.yml`, `instant-sync.yml`, `push-email-notify.yml`::
+These are among the template's hard-required workflows, and they are *not*
+adopted. They are the notification-storm workflows that were frozen across the
+organisation after generating roughly 4,300 notifications. Committing them here
+would re-arm an amplifier that was deliberately disabled.
+
+`codeql.yml`::
+Not adopted. GitHub code-scanning *default setup* is already enabled for this
+repository (actions and javascript, extended query suite, weekly). An advanced
+CodeQL workflow conflicts with default setup and its analyses are rejected, so
+the file would be a permanently failing check. *Scanning is present; the
+workflow file is not.* The template's own `codeql.yml` is additionally
+unusable as-is — it carries malformed step indentation and an unpinned
+`SonarSource/sonarqube-scan-action@master`, which the organisation's
+`sha_pinning_required` rejects outright.
+
+The remaining template-required workflows::
+`hypatia-scan`, `scorecard`, `quality`, `guix-policy`, `security-policy`,
+`wellknown-enforcement`, `workflow-linter`, `npm-bun-blocker`, `ts-blocker`,
+`secret-scanner`. Not adopted for this repository at this time. Most are thin
+wrappers over reusable workflows in `hyperpolymath/standards` that currently
+`startup_failure`; adding a wrapper over a broken reusable produces a check that
+never runs, which reads as absence rather than failure. The estate-wide fix
+belongs upstream, not here. Note also that the template's own
+`validate-template.sh` is internally inconsistent about this set — its header
+says 17, its array holds 13, and its threshold check tests for 15.
+
+=== Structure not adopted
+
+`.ncl` / `.k9.ncl` contractile runners::
+The trident's third and second legs. Not shipped, because the Nickel contractile
+runners are not built anywhere in the estate — committing them would be
+scaffolding that cannot execute. Instead, every probe in this repository's
+contractiles is a plain shell one-liner and `scripts/contractiles.mjs` *runs
+them for real*, wired into `just contracts` and into CI. When the estate's
+runners land, add them per verb and drop the shim.
+
+`README.adoc`::
+This repository uses `README.md`. Tolerated by the estate quality gate; the
+document is complete and renders natively on GitHub.
+
+`docs/adr/`::
+Not present. The project is a single level; decisions `D-01`..`D-10` are
+recorded in `.machine_readable/descriptiles/META.a2ml`, each with the evidence
+that settled it. Promote to a `docs/adr/` tree when a second level exists.
+
+Capability-gated scaffolding::
+`abi.ipkg`, `src/interface/`, `verification/proofs/`, `container/`,
+`build/guix.scm`, `benches/` are all absent and correctly so — this repository
+declares none of the capabilities that gate them. Declaring a capability it does
+not carry would score it against a module it does not have, and would
+manufacture both false gaps and false credit.
+
+=== Defects found upstream while doing this work
+
+Recorded here so they are not silently inherited by the next repository
+scaffolded from the template:
+
+. `rsr-template-repo`'s own `Mustfile.a2ml` probes the *flat* contractile paths
+  (`contractiles/Mustfile.a2ml`), but the template ships the *trident* layout
+  mandated by `INDEX.a2ml` v2.0.0 (`contractiles/must/Mustfile.a2ml`). Its
+  `contractiles-files-present` check is `critical` and would fail against the
+  template's own tree. This repository uses the trident paths, and its probes
+  reference paths that exist.
+. `self-validating-structure` probes `self-validating/k9-svc/`, which does not
+  exist in the template.
+. IDApTIK's `.machine_readable/6a2/PLAYBOOK.a2ml` instructs the reader to run
+  `bash validate-a2ml.sh`; no such file exists in that repository.
+. IDApTIK's `pages.yml` uses `actions/checkout@v4` unpinned, which the
+  organisation's `sha_pinning_required` rejects.
+
+== Bot requirement
+
+Automated agents arriving at this repository must read, in order:
+
+. `0-AI-MANIFEST.a2ml`
+. `.machine_readable/descriptiles/STATE.a2ml` — in particular
+  `[settled-questions]`, which lists closed questions that must not be
+  re-derived
+. `VERIFICATION.md`
+
+and must observe the constraints in
+`.machine_readable/descriptiles/AGENTIC.a2ml`.
+
+== Canonical standards
+
+Read these as the authoritative source:
+
+* `standards/component-readiness-grades/COMPONENT-READINESS-GRADES.md`
+* `standards/release-pre-flight/V1-GATE.adoc`
+* `standards/publication-pre-flight/PREFLIGHT.adoc`
+* `standards/session-management-standards/README.adoc`
