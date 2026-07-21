@@ -141,6 +141,21 @@ Not present. The project is a single level; decisions `D-01`..`D-10` are
 recorded in `.machine_readable/descriptiles/META.a2ml`, each with the evidence
 that settled it. Promote to a `docs/adr/` tree when a second level exists.
 
+Cryptographically signed commits::
+The template's Mustfile makes `signed-commits` a *critical* rule, probed with
+`git verify-commit HEAD`. *That probe would fail on this repository.* Commits
+here carry a DCO 1.1 sign-off (`git commit -s`) but are not cryptographically
+verifiable, and this repo's Trustfile deliberately encodes the weaker
+`dco-signoff` check at `warning` severity instead. This is a real deviation from
+a critical template rule, recorded here rather than left to look like an
+oversight. The cause is estate-wide and not fixable from inside this repository:
+the estate signs with SSH (`gpg.format=ssh`) but the key was never registered
+with GitHub as a *Signing Key*, so every estate commit reads "Unverified"
+regardless of local `%G?`. Registering that key is the fix, and it is an
+account-level action. Note the contrast visible in this repo's own history:
+the Dependabot and merge commits GitHub created are signed; the ones authored
+locally are not.
+
 Capability-gated scaffolding::
 `abi.ipkg`, `src/interface/`, `verification/proofs/`, `container/`,
 `build/guix.scm`, `benches/` are all absent and correctly so — this repository
