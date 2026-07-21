@@ -4,7 +4,7 @@
 #
 # The game is a single self-contained HTML file with no dependencies, so the
 # "site" is that file served as index.html. There is no static-site generator
-# involved and nothing to build beyond what CI already verifies.
+# involved and nothing to build beyond what ci.yml already verifies.
 #
 # Two things this workflow does NOT do, deliberately:
 #   * It does not regenerate the bundle. ci.yml already asserts the committed
@@ -13,9 +13,22 @@
 #   * It does not run on pull requests. Deploying a PR to the live site would
 #     publish unreviewed content.
 #
-# Every `uses:` is pinned to a full commit SHA: the org enforces
-# sha_pinning_required, and a tag ref produces startup_failure at 0s — a check
-# that never runs, which reads as absence rather than failure.
+# ── Why the artifact is packed by hand ───────────────────────────────────────
+# The obvious step here is actions/upload-pages-artifact. It cannot be used in
+# this organisation: it internally calls `actions/upload-artifact@v4` by TAG,
+# and the org requires every action — including transitive ones — to be pinned
+# to a full-length commit SHA. The run fails at startup with
+#   "The action actions/upload-artifact@v4 is not allowed in
+#    metadatastician/f19-stealth-glider ... All actions must also be pinned to
+#    a full-length commit SHA."
+# and startup_failure is the worst kind of red, because it reads as a check that
+# never ran rather than one that failed.
+#
+# So the two things upload-pages-artifact does are done explicitly below: build
+# the deterministic tarball it would have built, and upload it under the
+# artifact name `github-pages` that actions/deploy-pages expects. Every `uses:`
+# here is SHA-pinned, and there are no transitive action calls left to violate
+# the policy.
 
 name: pages
 on:
@@ -48,13 +61,33 @@ jobs:
           mkdir -p _site
           cp f19-stealth-glider.html _site/index.html
           cp f19-stealth-glider.html _site/f19-stealth-glider.html
+          mkdir -p _site/.well-known
+          cp .well-known/*.txt _site/.well-known/
           # Bypass Jekyll — this is a plain static file, not a Jekyll source tree.
           touch _site/.nojekyll
           echo "site assembled ($(wc -c < _site/index.html) bytes)"
 
-      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
+      # Exactly what actions/upload-pages-artifact packs, done inline so no
+      # unpinned transitive action is involved. Deploy expects a single
+      # artifact.tar at the root of an artifact named `github-pages`.
+      - name: Pack the Pages artifact
+        run: |
+          set -euo pipefail
+          tar \
+            --dereference --hard-dereference \
+            --directory _site \
+            -cvf "${RUNNER_TEMP}/artifact.tar" \
+            --exclude=.git \
+            --exclude=.github \
+            .
+          echo "packed $(wc -c < "${RUNNER_TEMP}/artifact.tar") bytes"
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          path: _site
+          name: github-pages
+          path: ${{ runner.temp }}/artifact.tar
+          retention-days: 1
+          if-no-files-found: error
 
   deploy:
     name: deploy to github-pages
