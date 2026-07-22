@@ -6,6 +6,10 @@
 
 **Operation Nightstep** — a stealth puzzle played on a live Conway's Game of Life field (B3/S23).
 
+<p align="center"><em>Operation Nightstep — A stealth puzzle played on a live Conway field.</em></p>
+
+---
+
 <!-- Hero banner for F19 Stealth Glider -->
 <p align="center">
   <img 
@@ -17,10 +21,6 @@
 </p>
 
 </div>
-
-<p align="center"><em>Operation Nightstep — A stealth puzzle played on a live Conway field.</em></p>
-
----
 
 ## What this is
 
