@@ -4,13 +4,19 @@ import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { randomBytes } from 'node:crypto';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-// Create a secure temporary directory with random name
-const tmpDir = `${tmpdir()}/f19-${randomBytes(16).toString('hex')}`;
+// Use __dirname to get the current directory
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// Create a secure temporary directory within the project directory
+// This avoids shared /tmp security issues entirely
+const tmpDir = join(__dirname, '.tmp', randomBytes(16).toString('hex'));
 mkdirSync(tmpDir, { mode: 0o700, recursive: true });
 
 // Generate temporary file paths in the secure directory
-const tmpFile = (ext = '') => `${tmpDir}/f19-${randomBytes(8).toString('hex')}${ext}`;
+const tmpFile = (ext = '') => join(tmpDir, `f19-${randomBytes(8).toString('hex')}${ext}`);
 
 const strip = src => src
   .split('\n')
