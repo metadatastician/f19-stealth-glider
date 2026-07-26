@@ -2,6 +2,11 @@
 // Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
 import { readFileSync, writeFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
+import { tmpdir } from 'node:os';
+import { randomBytes } from 'node:crypto';
+
+// Generate unique temporary filenames to avoid race conditions
+const tmpFile = (ext = '') => `${tmpdir()}/f19-${randomBytes(8).toString('hex')}${ext}`;
 
 const strip = src => src
   .split('\n')
@@ -14,18 +19,20 @@ const ui = strip(readFileSync('ui.js', 'utf8'));
 const js = core + '\n\n' + ui;
 
 // check 1: syntax of the exact shipped script
-writeFileSync('/tmp/f19-bundle.js', js);
-execSync('node --check /tmp/f19-bundle.js', { stdio: 'inherit' });
+const bundlePath = tmpFile('.js');
+writeFileSync(bundlePath, js);
+execSync(`node --check ${bundlePath}`, { stdio: 'inherit' });
 
 // check 2: the transformed CORE still flies the witness (same transform as shipped)
-writeFileSync('/tmp/f19-core.mjs', core + `
+const corePath = tmpFile('.mjs');
+writeFileSync(corePath, core + `
 const L = buildLevel();
 const M = createMission(L);
 for (let t = 0; t < 1200 && !M.result; t++) missionStep(M, null);
 if (M.result !== 'LANDED' || M.trace !== 0) throw new Error('bundle smoke failed: ' + M.result + ' trace ' + M.trace);
 console.log('bundle core smoke: LANDED trace 0');
 `);
-execSync('node /tmp/f19-core.mjs', { stdio: 'inherit' });
+execSync(`node ${corePath}`, { stdio: 'inherit' });
 
 const css = `
 :root{color-scheme:dark}
