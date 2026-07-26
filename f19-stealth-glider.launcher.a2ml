@@ -1,0 +1,37 @@
+# SPDX-License-Identifier: MPL-2.0
+# Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
+#
+# f19-stealth-glider.launcher.a2ml — per-app launcher config for F19 Stealth Glider.
+# Compliant with launcher-standard.a2ml v0.3.0
+
+[project]
+name         = "f19-stealth-glider"
+display      = "F19 Stealth Glider"
+description  = "Stealth game"
+categories   = ["Game"]
+version      = "0.1.0"
+license      = "MPL-2.0"
+
+[repo]
+path = ""
+
+[runtime]
+kind = "server-url"
+port = 3002
+url  = "http://localhost:3002"
+startup-command-search = [
+    "{repo-dir}/node_modules/.bin/serve",
+    "npx serve",
+    "serve",
+]
+pid-file = "${XDG_RUNTIME_DIR:-${TMPDIR:-/tmp}}/f19-stealth-glider.pid"
+log-file = "${XDG_STATE_HOME:-$HOME/.local/state}/f19-stealth-glider/game.log"
+wait-for-url-timeout-seconds = 15
+
+[version-output]
+first-line-format = "f19-stealth-glider {version} ({build-sha-short}) [{platform}]"
+example = "f19-stealth-glider 0.1.0 (abc1234) [linux-x86_64]"
+exit-code = 0
+
+[icon]
+source = "{repo-dir}/assets/icon-256.png"
