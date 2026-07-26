@@ -1,12 +1,16 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { randomBytes } from 'node:crypto';
 
-// Generate unique temporary filenames to avoid race conditions
-const tmpFile = (ext = '') => `${tmpdir()}/f19-${randomBytes(8).toString('hex')}${ext}`;
+// Create a secure temporary directory with random name
+const tmpDir = `${tmpdir()}/f19-${randomBytes(16).toString('hex')}`;
+mkdirSync(tmpDir, { mode: 0o700, recursive: true });
+
+// Generate temporary file paths in the secure directory
+const tmpFile = (ext = '') => `${tmpDir}/f19-${randomBytes(8).toString('hex')}${ext}`;
 
 const strip = src => src
   .split('\n')
@@ -98,3 +102,6 @@ ${js}
 
 writeFileSync('f19-stealth-glider.html', html);
 console.log('built f19-stealth-glider.html:', (html.length / 1024).toFixed(1), 'KB');
+
+// Clean up the secure temporary directory
+rmSync(tmpDir, { recursive: true, force: true });
