@@ -113,7 +113,7 @@ unusable as-is — it carries malformed step indentation and an unpinned
 
 The remaining template-required workflows::
 `hypatia-scan`, `scorecard`, `quality`, `guix-policy`, `security-policy`,
-`wellknown-enforcement`, `workflow-linter`, `npm-bun-blocker`, `ts-blocker`,
+`wellknown-enforcement`, `workflow-linter`, `runtime-policy`,
 `secret-scanner`. Not adopted for this repository at this time. Most are thin
 wrappers over reusable workflows in `hyperpolymath/standards` that currently
 `startup_failure`; adding a wrapper over a broken reusable produces a check that
