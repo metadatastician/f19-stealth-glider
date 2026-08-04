@@ -141,10 +141,20 @@ generic template.
 ## CI Integrity
 
 ### workflows-sha-pinned
-- description: Every workflow `uses:` is pinned to a full commit SHA, never a tag
-- run: "! grep -rhoE 'uses: *[A-Za-z0-9_.-]+/[A-Za-z0-9_./-]+@[^ ]+' .github/workflows/ | grep -qvE '@[0-9a-f]{40}$'"
+- description: Every workflow `uses:` resolves through actions.lock to a full commit SHA
+- run: "test -f .github/workflows/actions.lock && for r in $(grep -rhoE 'uses: *[A-Za-z0-9_.-]+/[A-Za-z0-9_./-]+@[^ ]+' .github/workflows/ | sed -E 's/uses: *//' | sort -u); do grep -Fq -- $r .github/workflows/actions.lock || exit 1; done && test $(grep -c commit: .github/workflows/actions.lock) = $(grep -cE 'commit: .sha1-[0-9a-f]{40}.$' .github/workflows/actions.lock)"
 - severity: critical
-- notes: The org enforces sha_pinning_required. A tag ref causes startup_failure at 0s — a workflow that never runs and never reports red.
+- notes: |
+    Pinning moved to a lockfile on 2026-08-04. GitHub now refuses to start a
+    workflow with no .github/workflows/actions.lock ("Workflow must use a
+    lockfile"), so the immutable SHA lives there and the `uses:` line carries a
+    narrowed semver tag. The previous form of this probe grepped for a 40-hex
+    ref inline and would now reject every correctly-locked workflow.
+    This form is strictly stronger: the lockfile must exist, every workflow ref
+    must have an entry in it, and every recorded commit must be a full 40-char
+    sha1. The count comparison is deliberate — checking only that *some* entry
+    is 40 chars would pass a lockfile with one truncated SHA among valid ones.
+    Regenerate with `gh actions-lock`; never hand-edit the lockfile.
 
 ### ci-runs-the-cited-ledger
 - description: The CI workflow actually runs the cited verification scripts
