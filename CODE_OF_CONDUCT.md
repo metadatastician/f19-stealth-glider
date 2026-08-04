@@ -1,28 +1,10 @@
+<!-- SPDX-License-Identifier: CC-BY-SA-4.0 -->
+
 # Code of Conduct
-
-<!-- 
-============================================================================
-TEMPLATE INSTRUCTIONS (delete this block before publishing)
-============================================================================
-Replace all {{PLACEHOLDER}} values:
-  Squisher Corpus     - Your project name
-  hyperpolymath            - GitHub/GitLab username or org
-  squisher-corpus             - Repository name
-  j.d.a.jewell@open.ac.uk    - Email for conduct reports
-  maintainers     - Name of conduct team/committee
-  48 hours    - Initial response SLA (e.g., 48 hours)
-  2026     - Current year
-
-Review and customise:
-- Adjust enforcement ladder for your community size
-- Add/remove examples based on your context
-- Ensure contact methods work for your team
-============================================================================
--->
 
 ## Our Pledge
 
-We as members, contributors, and leaders pledge to make participation in Squisher Corpus a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, caste, colour, religion, or sexual identity and orientation.
+We as members, contributors, and leaders pledge to make participation in F19 Stealth Glider a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, caste, colour, religion, or sexual identity and orientation.
 
 We pledge to act and interact in ways that contribute to an open, welcoming, diverse, inclusive, and healthy community.
 
@@ -138,7 +120,6 @@ If you experience or witness unacceptable behaviour, or have any other concerns,
 |--------|---------|----------|
 | **Email** | j.d.a.jewell@open.ac.uk | Detailed reports, sensitive matters |
 | **Private Message** | Contact any maintainer directly | Quick questions, minor issues |
-| **Anonymous Form** | [Link to form if available] | When you need anonymity |
 
 **What to Include**
 
@@ -169,7 +150,7 @@ All reports will be handled with discretion:
 
 ### Conflicts of Interest
 
-If a maintainers member is involved in an incident:
+If a maintainer is involved in an incident:
 
 - They will recuse themselves from the process
 - Another maintainer or external party will handle the report
@@ -213,15 +194,15 @@ The maintainers will follow these guidelines in determining consequences:
 
 **Duration**: Permanent (with appeal rights after 12 months)
 
-### Enforcement Across Perimeters
+### Enforcement for Contributors with Write Access
 
-For contributors with elevated access (Perimeter 2 or 1):
+For maintainers and anyone else holding write access to the repository:
 
 | Level | Additional Consequence |
 |-------|----------------------|
 | Correction | Noted in contributor record |
 | Warning | Access privileges may be temporarily reduced |
-| Temporary Ban | Access reduced to Perimeter 3 for ban duration |
+| Temporary Ban | Write access suspended for the ban duration |
 | Permanent Ban | All access revoked |
 
 ---
@@ -237,7 +218,7 @@ If you believe an enforcement decision was made in error:
 
 **Appeals Process**
 
-- Appeals are reviewed by a different maintainers member than the original
+- Appeals are reviewed by a different maintainer than the original
 - You will receive a response within 14 days
 - The appeals decision is final
 - You may only appeal once per incident
@@ -277,7 +258,7 @@ Beyond enforcement, we actively work to prevent issues:
 
 **Onboarding**
 - All contributors are expected to read this Code of Conduct
-- Perimeter 2 applicants must confirm they've read and understood it
+- Anyone requesting write access must confirm they've read and understood it
 - Maintainers receive additional training on enforcement
 
 **Culture**
@@ -310,7 +291,7 @@ We thank these communities for their leadership in creating welcoming spaces.
 
 If you have questions about this Code of Conduct:
 
-- Open a [Discussion](https://github.com/hyperpolymath/squisher-corpus/discussions) (for general questions)
+- Open a [Discussion](https://github.com/metadatastician/f19-stealth-glider/discussions) (for general questions)
 - Email j.d.a.jewell@open.ac.uk (for private questions)
 - Contact any maintainer directly
 
