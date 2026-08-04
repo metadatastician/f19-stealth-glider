@@ -1,4 +1,3 @@
-# This workflow is managed by gh actions-lock.
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
 # The real gate for F19 Stealth Glider. Every step here can fail; none of them
@@ -6,14 +5,9 @@
 # check that cannot fail is worse than no check, because it reads as coverage.
 #
 # ubuntu-latest ships Node 20 preinstalled and the project has zero
-# dependencies, so there is no setup-node and no install step.
-#
-# Action pinning moved to a lockfile on 2026-08-04. GitHub now refuses to start
-# a workflow that has no .github/workflows/actions.lock ("Workflow must use a
-# lockfile"), so the immutable SHA lives in that file and the `uses:` line
-# carries a narrowed semver tag. Do not "fix" those tags back to inline SHAs —
-# regenerate with `gh actions-lock` instead. The lockfile is verified by a step
-# below, offline.
+# dependencies, so there is no setup-node and no install step. Every `uses:` is
+# pinned to a full commit SHA: the org enforces sha_pinning_required, and a tag
+# ref produces startup_failure at 0s — a check that never runs.
 #
 # Code scanning is NOT here: it runs via GitHub code-scanning default setup
 # (actions + javascript, extended suite, weekly). An advanced codeql.yml would
@@ -39,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       # ubuntu-latest ships Node 20 preinstalled; no setup-node needed.
       - name: Node version
         run: node --version
@@ -82,7 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       # Every `- run:` probe in .machine_readable/contractiles/ is a shell
       # one-liner, so they are executed for real rather than read as prose.
@@ -101,53 +95,18 @@ jobs:
           done < <(find . -name '*.a2ml' -not -path './.git/*')
           [ "$fail" = 0 ]
 
-      # Guards against the failure mode this repo has hit twice: an action ref
-      # the platform will not accept, which reports as startup_failure at 0s
-      # rather than as a red check — a gate that never runs.
-      #
-      # The mechanism changed on 2026-08-04. GitHub now requires a workflow
-      # lockfile (.github/workflows/actions.lock) and refuses to start a
-      # workflow without one: "Workflow must use a lockfile." Under that model
-      # the immutable SHA lives in the lockfile and the workflow carries a
-      # narrowed semver tag, so the previous "every ref is 40 hex chars" grep
-      # would now reject every correctly-locked ref.
-      #
-      # This check is the lockfile-aware equivalent, and is strictly stronger
-      # than the grep it replaces: every ref must have a lockfile entry AND
-      # that entry must resolve to a full 40-character SHA. The old grep
-      # verified shape only; it could not tell a real commit from a plausible
-      # one. Pure stdlib, no network, no gh extension — so it cannot fail open
-      # because a tool was unavailable.
-      - name: Every action ref is locked to a full commit SHA
+      # Guards against the failure mode this repo hit on its first run: a tag
+      # ref is rejected by the org before the workflow starts, so it reports as
+      # startup_failure rather than as a red check.
+      - name: Every action is pinned to a full commit SHA
         run: |
           set -euo pipefail
-          python3 - <<'PY'
-          import re, sys, pathlib
-          lock = pathlib.Path(".github/workflows/actions.lock")
-          if not lock.is_file():
-              sys.exit("::error::.github/workflows/actions.lock is missing — "
-                       "GitHub refuses to start workflows without it. Run `gh actions-lock`.")
-          text = lock.read_text()
-          # commit: 'sha1-<40 hex>' — one entry per locked dependency.
-          locked = {}
-          for dep, sha in re.findall(
-                  r"^\s{4}'([^']+)':\s*$(?:\n(?!\s{4}').*)*?\n\s+commit:\s*'sha1-([0-9a-f]{40})'",
-                  text, re.M):
-              locked[dep] = sha
-          if not locked:
-              sys.exit("::error::actions.lock contains no resolved dependencies")
-          bad = 0
-          for wf in sorted(pathlib.Path(".github/workflows").glob("*.yml")):
-              for ref in re.findall(r"^\s*-?\s*uses:\s*([^\s#]+)", wf.read_text(), re.M):
-                  if ref.startswith(("./", "$")):
-                      continue  # same-repo action: inherently pinned to this commit
-                  if ref not in locked:
-                      print(f"::error file={wf}::{ref} has no actions.lock entry")
-                      bad = 1
-          if bad:
-              sys.exit(1)
-          print(f"all action refs locked to full SHAs ({len(locked)} dependencies)")
-          PY
+          if grep -rhoE 'uses: *[A-Za-z0-9_.-]+/[A-Za-z0-9_./-]+@[^ ]+' .github/workflows/ \
+             | grep -vE '@[0-9a-f]{40}$'; then
+            echo "::error::the above action refs are not pinned to a 40-character commit SHA"
+            exit 1
+          fi
+          echo "all action refs are SHA-pinned"
 
       # "All documentation filled in" is checkable: no RSR substitution token
       # may survive anywhere in the tree.
