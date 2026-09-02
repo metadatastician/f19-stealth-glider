@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 #
 # The real gate for F19 Stealth Glider. Every step here can fail; none of them
 # is annotate-only. If you add a step, make sure it can actually go red — a
@@ -43,8 +43,8 @@ jobs:
           set -euo pipefail
           fail=0
           for f in src/*.mjs src/*.js scripts/*.mjs; do
-            if [ "$(head -1 "$f")" != "// SPDX-License-Identifier: AGPL-3.0-or-later" ]; then
-              echo "::error file=$f::missing SPDX AGPL header"; fail=1
+            if [ "$(head -1 "$f")" != "// SPDX-License-Identifier: MPL-2.0" ]; then
+              echo "::error file=$f::missing SPDX MPL-2.0 header"; fail=1
             fi
           done
           [ "$fail" = 0 ]
