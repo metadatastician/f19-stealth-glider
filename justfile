@@ -55,7 +55,7 @@ test: verify build
     fi
     rm -f f19-stealth-glider.html
 
-# Root shape in BOTH directions against .machine_readable/root-allow.txt (RSR contract).
+# Root shape in BOTH directions against machine-readable/root-allow.txt (RSR contract).
 root-shape:
     bash scripts/check-root-shape.sh .
 

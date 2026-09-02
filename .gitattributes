@@ -33,5 +33,5 @@ LICENSE      text eol=lf linguist-vendored=true
 LICENSES/**  text eol=lf linguist-vendored=true
 
 # ── Documentation ────────────────────────────────────────────────────────────
-# Count VERIFICATION.md as documentation rather than prose-of-unknown-kind.
+# Count VERIFICATION.adoc as documentation rather than prose-of-unknown-kind.
 *.adoc linguist-documentation=true
