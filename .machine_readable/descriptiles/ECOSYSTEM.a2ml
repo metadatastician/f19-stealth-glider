@@ -13,6 +13,12 @@ type = "game"
 purpose = "A stealth puzzle whose enemy is a cellular automaton. The player flies one glider to a hangar across a live B3/S23 field; every hazard is a real Life pattern, so evading them means reading the automaton's phase rather than learning a patrol route."
 scope = "One complete, fully verified level (Operation Nightstep v0). Deliberately small: the point is that the substrate is provably load-bearing, demonstrated once and rigorously, rather than sprawled across many levels."
 
+[pipeline]
+position = "first Stealth Glider investigation"
+chain = "f19-stealth-glider -> f117a-stealth-glider -> sr71-blackglider -> x15-rocket-glider -> planer-1 -> enterglide-ncc-137-k -> tardis-rule-disruption"
+notes = "The chain is canonical in the coordination hub; this file copies it verbatim and is checked by the hub's membership gate."
+coordination = "metadatastician/stealth-glider-ecosystem"
+
 [architecture]
 substrate = "src/engine.mjs — B3/S23 core: bounded grid, step, RLE, the 8 symmetries, bounds-checked stamp, named pattern library, empirically derived glider kinematics, shadow-filtered findGlider."
 mission = "src/mission.mjs — player overlay, Chebyshev contact rule, sensors, trace accounting, hangar splice, ambient stepping."
@@ -31,6 +37,9 @@ projects = [
   { name = "IDApTIK", relationship = "sibling", notes = "The estate's other game, also under metadatastician. Shares the governance and machine-readable conventions, no code." },
   { name = "Conway's Game of Life (B3/S23)", relationship = "substrate", notes = "Not a dependency — the rule itself, implemented from scratch in engine.mjs." },
   { name = "Gosper glider gun", relationship = "level-primitive", notes = "The period-30 stream generator that forms the impassable eastern border. Verified to emit one isolated SE glider every 30 generations on lane 14." },
+  { name = "f117a-stealth-glider", relationship = "conceptual successor", notes = "Second Stealth Glider investigation; vendors this repository's engine.mjs verbatim as its kernel." },
+  { name = "sr71-blackglider", relationship = "conceptual successor", notes = "Third Stealth Glider investigation." },
+  { name = "stealth-glider-ecosystem", relationship = "coordination hub", notes = "Holds the canonical chain and membership manifest for the Stealth Glider line." },
 ]
 
 [boundaries]
