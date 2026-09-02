@@ -73,7 +73,7 @@ If you add a probe, it must actually pass against this tree.
   (Life is translation-invariant away from borders) — never relax `stamp`.
 - **The bundle is reproducible.** `f19-stealth-glider.html` must always equal a
   fresh `just build`. CI enforces this byte-for-byte.
-- Licence is AGPL-3.0-or-later for all code. Every `src/*.mjs` and `src/*.js`
+- Licence is MPL-2.0 for all code. Every `src/*.mjs` and `src/*.js`
   carries an SPDX header as its first line; CI enforces that too.
 - State/metadata belongs under `machine-readable/`, not the repository root.
   The root carries only `0-AI-MANIFEST.a2ml` and `k9iser.toml`.

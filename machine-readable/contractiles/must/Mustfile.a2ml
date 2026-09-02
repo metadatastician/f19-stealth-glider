@@ -26,13 +26,13 @@ generic template.
 
 ### license-texts-vendored
 - description: Every SPDX identifier used in the tree has its text vendored under LICENSES/
-- run: test -f LICENSES/AGPL-3.0-or-later.txt && test -f LICENSES/MPL-2.0.txt && test -f LICENSES/CC-BY-SA-4.0.txt
+- run: test -f LICENSES/MPL-2.0.txt && test -f LICENSES/CC-BY-SA-4.0.txt
 - severity: critical
-- notes: AGPL for code, MPL for the .a2ml metadata set, CC-BY-SA for the descriptiles README.adoc and the .adoc documentation.
+- notes: MPL-2.0 for code and the .a2ml metadata set (AGPL-3.0-or-later until the owner ruling of 2026-09-02), CC-BY-SA for the descriptiles README.adoc and the .adoc documentation.
 
 ### license-matches-vendored-text
-- description: The root LICENSE is byte-identical to the vendored AGPL text
-- run: cmp -s LICENSE LICENSES/AGPL-3.0-or-later.txt
+- description: The root LICENSE is byte-identical to the vendored MPL-2.0 text
+- run: cmp -s LICENSE LICENSES/MPL-2.0.txt
 - severity: critical
 
 ### readme-present
@@ -97,8 +97,8 @@ generic template.
 - severity: critical
 
 ### spdx-headers-on-every-source
-- description: Every src/*.mjs and src/*.js declares AGPL-3.0-or-later on its FIRST line
-- run: "! for f in src/*.mjs src/*.js; do head -1 \"$f\" | grep -q '^// SPDX-License-Identifier: AGPL-3.0-or-later$' || echo BAD; done | grep -q BAD"
+- description: Every src/*.mjs and src/*.js declares MPL-2.0 on its FIRST line
+- run: "! for f in src/*.mjs src/*.js; do head -1 \"$f\" | grep -q '^// SPDX-License-Identifier: MPL-2.0$' || echo BAD; done | grep -q BAD"
 - severity: critical
 
 ## Design Invariants
@@ -133,9 +133,9 @@ generic template.
 - severity: critical
 - notes: Zero dependencies is a design property, not an accident (D-08).
 
-### package-license-agpl
-- description: package.json declares the AGPL licence
-- run: grep -q '"license": "AGPL-3.0-or-later"' package.json
+### package-license-mpl
+- description: package.json declares the MPL-2.0 licence
+- run: grep -q '"license": "MPL-2.0"' package.json
 - severity: critical
 
 ## CI Integrity

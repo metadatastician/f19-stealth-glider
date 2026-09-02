@@ -63,6 +63,11 @@ phase = "active"
 since = "2026-09-02"
 note = "Owner ruling 2026-09-02, applied the same day: metadata tree moved from the dotted .machine_readable/ to the template's un-hidden machine-readable/; the eight root Markdown documents (README, CHANGELOG, ARCHITECTURE, VERIFICATION, GOVERNANCE, CODE_OF_CONDUCT, CONTRIBUTING, SECURITY) converted to AsciiDoc; only .github/pull_request_template.md stays Markdown (GitHub recognises no other name). The uuid, lineage and the absence of instantiated-from are unchanged."
 
+[[status.history]]
+phase = "active"
+since = "2026-09-02"
+note = "Relicensed by owner ruling 2026-09-02: code and .a2ml metadata AGPL-3.0-or-later -> MPL-2.0, documentation CC-BY-SA-4.0. LICENSE is now the vendored MPL-2.0 text; LICENSES/AGPL-3.0-or-later.txt removed; the licence probes (Mustfile, Bustfile drill, ci.yml header gate, k9iser rule) now defend MPL-2.0. This was a ruling, not a sweep."
+
 [provenance]
 # Recorded because the repository's history is shorter than the work it contains.
 note = "The engine, mission layer, frozen level and the ten verification scripts were authored before this repository existed and were briefly believed lost. They were recovered intact from an exported archive and landed here as the first commit, so the git history begins after the design work rather than alongside it. VERIFICATION.adoc is therefore the authoritative record of how each claim was established — not the commit log."

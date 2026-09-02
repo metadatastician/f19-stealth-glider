@@ -29,7 +29,7 @@ CONTRIBUTING.adoc
 SECURITY.adoc
 CITATION.cff
 0-AI-MANIFEST.a2ml         # universal AI entry point
-LICENSE                    # AGPL-3.0-or-later: this repo's licence, not the template's MPL-2.0 default
+LICENSE                    # MPL-2.0 (relicensed from AGPL-3.0-or-later on 2026-09-02, owner ruling)
 LICENSES/                  # REUSE licence texts
 
 # ─── Build and tooling ───────────────────────────────────────────────────────

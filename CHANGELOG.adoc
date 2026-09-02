@@ -10,6 +10,12 @@ and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Version
 
 == https://github.com/metadatastician/f19-stealth-glider/compare/v0.1.0...HEAD[Unreleased]
 
+=== Changed
+
+* Relicensed: code and `.a2ml` metadata are MPL-2.0, documentation is CC-BY-SA-4.0
+  (was AGPL-3.0-or-later for code). Owner ruling 2026-09-02; `LICENSE`, `LICENSES/`,
+  `package.json`, `CITATION.cff`, every SPDX header and the licence probes moved together.
+
 === Added
 
 * Full RSR (Rhodium Standard Repository) compliance set: governance documents,

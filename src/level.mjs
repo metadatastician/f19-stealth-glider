@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
 // Operation Nightstep v2 — level data. Geometry justified in verify9 audits.
 // Topology: region A (north) | fence row y=54 with ONE breach | region B (south, hangar).

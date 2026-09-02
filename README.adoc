@@ -67,8 +67,8 @@ CI fails on any critical breach.
 
 == Licence
 
-link:./LICENSE[AGPL-3.0-or-later] for code; `MPL-2.0` for the `.a2ml` metadata set;
-`CC-BY-SA-4.0` for documentation. Licence texts are vendored under
+link:./LICENSE[MPL-2.0] for code and the `.a2ml` metadata set; `CC-BY-SA-4.0` for
+documentation. Relicensed from AGPL-3.0-or-later on 2026-09-02 by owner ruling. Licence texts are vendored under
 link:./LICENSES[`LICENSES/`]. © 2026 Jonathan D.A. Jewell (hyperpolymath).
 
 Contributions are accepted under the Developer Certificate of Origin 1.1 —
