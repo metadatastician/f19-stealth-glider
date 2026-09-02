@@ -91,7 +91,7 @@ Stated plainly, because the distinction is easy to overstate:
 == Deliberate deviations from the RSR template
 
 Each item below is a conscious decision, not a gap. The machine-readable copy
-lives in `.machine_readable/rsr-profile.a2ml` under `[deliberate-deviations]`.
+lives in `machine-readable/rsr-profile.a2ml` under `[deliberate-deviations]`.
 
 === Workflows not adopted
 
@@ -138,7 +138,7 @@ document is complete and renders natively on GitHub.
 
 `docs/adr/`::
 Not present. The project is a single level; decisions `D-01`..`D-10` are
-recorded in `.machine_readable/descriptiles/META.a2ml`, each with the evidence
+recorded in `machine-readable/descriptiles/META.a2ml`, each with the evidence
 that settled it. Promote to a `docs/adr/` tree when a second level exists.
 
 Capability-gated scaffolding::
@@ -176,7 +176,7 @@ scaffolded from the template:
   reference paths that exist.
 . `self-validating-structure` probes `self-validating/k9-svc/`, which does not
   exist in the template.
-. IDApTIK's `.machine_readable/6a2/PLAYBOOK.a2ml` instructs the reader to run
+. IDApTIK's `machine-readable/descriptiles/PLAYBOOK.a2ml` instructs the reader to run
   `bash validate-a2ml.sh`; no such file exists in that repository.
 . IDApTIK's `pages.yml` uses `actions/checkout@v4` unpinned, which the
   organisation's `sha_pinning_required` rejects.
@@ -186,13 +186,13 @@ scaffolded from the template:
 Automated agents arriving at this repository must read, in order:
 
 . `0-AI-MANIFEST.a2ml`
-. `.machine_readable/descriptiles/STATE.a2ml` — in particular
+. `machine-readable/descriptiles/STATE.a2ml` — in particular
   `[settled-questions]`, which lists closed questions that must not be
   re-derived
 . `VERIFICATION.md`
 
 and must observe the constraints in
-`.machine_readable/descriptiles/AGENTIC.a2ml`.
+`machine-readable/descriptiles/AGENTIC.a2ml`.
 
 == Canonical standards
 

@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Full RSR (Rhodium Standard Repository) compliance set: governance documents,
-  the `.machine_readable/descriptiles/` metadata family, the six contractile
+  the `machine-readable/descriptiles/` metadata family, the six contractile
   verbs on the trident layout, `rsr-profile.a2ml`, `CLADE.a2ml`, `ANCHOR.a2ml`,
   vendored `LICENSES/`, and the `.well-known/` trio.
 - `scripts/contractiles.mjs` — a runner that **executes** the contractile probes

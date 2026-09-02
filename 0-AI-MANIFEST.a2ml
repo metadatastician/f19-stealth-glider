@@ -5,7 +5,7 @@
 
 This is the root AI-assistant manifest for **F19 Stealth Glider**, a stealth
 puzzle ("Operation Nightstep") played on a live Conway's Game of Life field.
-Read this first, then `.machine_readable/6a2/STATE.a2ml`, then
+Read this first, then `machine-readable/descriptiles/STATE.a2ml`, then
 `VERIFICATION.md` — the last of those is the project's centre of gravity.
 
 The repository is small, dependency-free JavaScript (ESM, Node >= 18). There is
@@ -33,14 +33,14 @@ runtime service. Everything interesting is in the geometry.
 - `VERIFICATION.md` — the 11-claim ledger, with honest disclosures. Authoritative.
 - `f19-stealth-glider.html` — the committed, playable bundle at the repo root.
                       CI asserts it is byte-identical to a fresh rebuild.
-- `.machine_readable/` — this manifest's detail: `6a2/` (six core A2ML files)
+- `machine-readable/` — this manifest's detail: `6a2/` (six core A2ML files)
                       + `contractiles/` (executable, see below).
 
 ## Machine-Readable Standard
 
-- `.machine_readable/6a2/`          — STATE, META, ECOSYSTEM, AGENTIC, NEUROSYM,
+- `machine-readable/descriptiles/`          — STATE, META, ECOSYSTEM, AGENTIC, NEUROSYM,
                                       PLAYBOOK (+ README.adoc).
-- `.machine_readable/contractiles/` — Intentfile, Mustfile, Trustfile, Adjustfile,
+- `machine-readable/contractiles/` — Intentfile, Mustfile, Trustfile, Adjustfile,
                                       Justfile, bust/Bustfile, dust/Dustfile.
 - `k9iser.toml`                     — wraps `package.json` into a self-validating
                                       K9 contract (the only machine-parsable
@@ -75,5 +75,5 @@ If you add a probe, it must actually pass against this tree.
   fresh `just build`. CI enforces this byte-for-byte.
 - Licence is AGPL-3.0-or-later for all code. Every `src/*.mjs` and `src/*.js`
   carries an SPDX header as its first line; CI enforces that too.
-- State/metadata belongs under `.machine_readable/`, not the repository root.
+- State/metadata belongs under `machine-readable/`, not the repository root.
   The root carries only `0-AI-MANIFEST.a2ml` and `k9iser.toml`.

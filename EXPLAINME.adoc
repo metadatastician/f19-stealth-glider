@@ -115,7 +115,7 @@ the retraction is recorded in `VERIFICATION.md` rather than quietly removed.
 == The contractiles actually run
 
 Claim::
-The `.machine_readable/contractiles/` probes are executable checks, not prose.
+The `machine-readable/contractiles/` probes are executable checks, not prose.
 
 How this is implemented::
 * Every `- run:` line in the contractile set is a plain shell one-liner.

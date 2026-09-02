@@ -88,7 +88,7 @@ and a perpendicular crosser needs roughly 17. No launch timing can help.
 
 `node scripts/contractiles.mjs --drills` ran *69 probes* with *no gating
 failures*, including all 9 Bustfile recovery drills. This is a live claim, not a
-declaration: every `- run:` probe in `.machine_readable/contractiles/` is a
+declaration: every `- run:` probe in `machine-readable/contractiles/` is a
 shell one-liner and the runner executes each one from the repository root.
 
 The design invariants were checked and hold: B3/S23 step present, `stamp()`

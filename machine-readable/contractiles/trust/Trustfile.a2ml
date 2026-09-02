@@ -117,7 +117,7 @@ destroy the project's entire premise without breaking anything visible.
 - areas:
   - LICENSE
   - LICENSES/
-  - .machine_readable/contractiles/
+  - machine-readable/contractiles/
   - .github/CODEOWNERS
   - src/level.mjs          # frozen geometry — the design itself (D-02)
   - src/engine.mjs         # the B3/S23 substrate; changes invalidate the whole ledger

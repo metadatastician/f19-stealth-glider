@@ -69,7 +69,7 @@ asserts the committed `f19-stealth-glider.html` is byte-identical to a fresh reb
 | [`CHANGELOG.md`](./CHANGELOG.md) | Including what was retracted. |
 
 Machine-readable metadata for agents lives in
-[`0-AI-MANIFEST.a2ml`](./0-AI-MANIFEST.a2ml) and `.machine_readable/`. The
+[`0-AI-MANIFEST.a2ml`](./0-AI-MANIFEST.a2ml) and `machine-readable/`. The
 contractile probes there are **executable** — `just contracts` runs them, and
 CI fails on any critical breach.
 
