@@ -31,7 +31,7 @@ How this is implemented::
 
 Caveat::
 The project admits *exactly one* fiction: a pre-contact kinematic overlay for
-the player's glider. It is declared in the README, in `VERIFICATION.md`, and in
+the player's glider. It is declared in the README, in `VERIFICATION.adoc`, and in
 `ANCHOR.a2ml`. It is valid only while the player is provably independent of the
 substrate — Chebyshev separation ≥ 3 — and the shipped contact rule fires at
 radius 2, comfortably inside that bound.
@@ -53,7 +53,7 @@ How this is implemented::
 * The arithmetic behind it: stream gliders sit roughly 15 units apart, and a
   perpendicular crosser needs roughly 17 units of clear corridor. 15 < 17, so no
   phase gap is ever wide enough.
-* Recorded as claim #4 in `VERIFICATION.md` and as a closed question in
+* Recorded as claim #4 in `VERIFICATION.adoc` and as a closed question in
   `descriptiles/STATE.a2ml` under `[settled-questions]`.
 
 Caveat::
@@ -95,7 +95,7 @@ Claim::
 Every row of the ledger is discharged by a named script that anyone can run.
 
 How this is implemented::
-* `VERIFICATION.md` is a table of 11 claims, each citing a script in `src/`.
+* `VERIFICATION.adoc` is a table of 11 claims, each citing a script in `src/`.
 * Each runs with a bare `node`, needs no arguments, no fixtures, and no network.
 * CI runs the cited subset — `verify1`, `2`, `3`, `8`, `9`, and `build` — on
   every push and fails on any red.
@@ -110,7 +110,7 @@ Caveat 2::
 One claim has already died in testing. An earlier sweep reported a second clean
 landing lane; it was an artefact of `stamp` silently absorbing out-of-bounds
 writes. `stamp` now throws, the corrected sweep finds exactly one clean lane, and
-the retraction is recorded in `VERIFICATION.md` rather than quietly removed.
+the retraction is recorded in `VERIFICATION.adoc` rather than quietly removed.
 
 == The contractiles actually run
 

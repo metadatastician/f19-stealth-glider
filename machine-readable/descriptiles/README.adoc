@@ -45,7 +45,7 @@ toc::[]
 
 . `../../0-AI-MANIFEST.a2ml` — the root manifest.
 . `STATE.a2ml` — where the project is, and which questions are already closed.
-. `../../VERIFICATION.md` — the 11-claim ledger. This is the project's centre of
+. `../../VERIFICATION.adoc` — the 11-claim ledger. This is the project's centre of
   gravity; every claim cites a script runnable with plain `node`.
 
 == The two invariants that matter most

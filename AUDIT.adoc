@@ -33,7 +33,7 @@ These are stronger than the estate baseline, because this project's central
 claim is falsifiable and cheap to destroy accidentally:
 
 * *A claim without a runnable script is not a result.* Every row in
-  `VERIFICATION.md` cites a script that runs with plain `node`.
+  `VERIFICATION.adoc` cites a script that runs with plain `node`.
 * *Claims are quantified over all 30 launch phases,* never sampled.
 * *A crashing verification script is a harness bug, not a finding.* A script
   that completes and reports "no viable candidate" _is_ a finding.
@@ -133,7 +133,7 @@ them for real*, wired into `just contracts` and into CI. When the estate's
 runners land, add them per verb and drop the shim.
 
 `README.adoc`::
-This repository uses `README.md`. Tolerated by the estate quality gate; the
+This repository uses `README.adoc`. Tolerated by the estate quality gate; the
 document is complete and renders natively on GitHub.
 
 `docs/adr/`::
@@ -189,7 +189,7 @@ Automated agents arriving at this repository must read, in order:
 . `machine-readable/descriptiles/STATE.a2ml` — in particular
   `[settled-questions]`, which lists closed questions that must not be
   re-derived
-. `VERIFICATION.md`
+. `VERIFICATION.adoc`
 
 and must observe the constraints in
 `machine-readable/descriptiles/AGENTIC.a2ml`.

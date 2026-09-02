@@ -15,7 +15,7 @@ of the README / EXPLAINME / AFFIRMATION trio:
 |===
 | File | Answers | Tense
 
-| `README.md`
+| `README.adoc`
 | _Where is this going, and why?_ — steering, intent, vision
 | future / aspirational
 
@@ -127,13 +127,13 @@ completable. Nothing tests the browser UI, input handling, or rendering.
 One claim has already died here.:: An earlier sweep reported a second clean
 landing lane. It was false — an artefact of `stamp()` silently absorbing
 out-of-bounds writes. `stamp()` now throws and the corrected sweep finds one
-lane. The retraction is recorded in `VERIFICATION.md` and `CHANGELOG.md` rather
+lane. The retraction is recorded in `VERIFICATION.adoc` and `CHANGELOG.adoc` rather
 than quietly removed, and it is the reason this project treats a crashing script
 as a bug and a completed negative result as a finding.
 
 == Contradictions found and resolved in this session
 
-. `VERIFICATION.md` claim #3 cited a session transcript rather than a runnable
+. `VERIFICATION.adoc` claim #3 cited a session transcript rather than a runnable
   script. A transcript is not an artefact. It now cites `verify3.mjs`.
 . `verify3.mjs` and `verify9.mjs` both threw `stamp out of bounds` at the most
   negative approach lanes. Fixed in the *harness* — enlarge the grid, co-shift

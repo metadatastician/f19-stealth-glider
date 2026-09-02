@@ -1,0 +1,60 @@
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// Copyright (c) 2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+
+= Contributing to F19 Stealth Glider
+
+Thanks for looking. This is a small, zero-dependency Node project whose
+claims are all discharged by scripts you can run yourself. Contributions are
+judged the same way: by what the ledger and the contractiles say afterwards.
+
+== Set up
+
+[source,bash]
+----
+git clone https://github.com/metadatastician/f19-stealth-glider.git
+cd f19-stealth-glider
+just ci        # ledger + reproducible bundle + contractile probes + root shape
+----
+
+Requirements: Node >= 18 (developed on Node 26) and `just`. There is nothing
+to install; every script under `src/` runs with plain `node`.
+
+== Repository shape
+
+The root allowlist is `machine-readable/root-allow.txt` and it is enforced in
+both directions by `scripts/check-root-shape.sh`. Add a root entry there or
+the gate fails; state and metadata live under `machine-readable/`, never at
+the root.
+
+* `src/` — engine, mission layer, frozen level, UI and the `verify*.mjs` ledger scripts
+* `f19-stealth-glider.html` — the committed single-file bundle; CI proves it byte-identical to a rebuild
+* `machine-readable/descriptiles/` — CLADE, ANCHOR, ECOSYSTEM, STATE and friends
+* `machine-readable/contractiles/` — Must/Trust/Bust/Dust/Intend/Adjust probes (`just contracts` runs them)
+* `VERIFICATION.adoc` — the claim ledger; claims change only with a re-run
+
+== Making a change
+
+. Branch from `main` (`fix/…`, `feat/…`, `docs/…`, `chore/…`).
+. Keep the ledger honest: if a change touches a claim in `VERIFICATION.adoc`,
+  re-run its script and update the ledger in the same commit.
+. Rebuild the bundle (`just build`) whenever `src/` changes and commit the
+  result; CI diffs it against a fresh build.
+. Run `just ci` before pushing. Green locally is the bar, not a suggestion.
+. Sign your commits. Use conventional-commit subjects
+  (`fix:`, `feat:`, `docs:`, `chore:`, `ci:`).
+
+== Reporting bugs and ideas
+
+Use the issue forms under `.github/ISSUE_TEMPLATE/` (bug report, feature
+request, documentation, question). For a bug, include the launch tick and the
+route you flew; determinism means we can reproduce it exactly.
+
+== Conduct and security
+
+This project follows `CODE_OF_CONDUCT.adoc`. Report vulnerabilities as
+described in `SECURITY.adoc`, not in a public issue.
+
+== Licence
+
+Contributions are accepted under the repository licence stated in `LICENSE`
+(see the README's Licence section). Documentation is CC-BY-SA-4.0.

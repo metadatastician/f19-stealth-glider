@@ -25,7 +25,7 @@ mission = "src/mission.mjs — player overlay, Chebyshev contact rule, sensors, 
 level = "src/level.mjs — FROZEN Operation Nightstep v2 geometry; single source of truth."
 presentation = "src/ui.js — browser render and input; no gameplay truth."
 distribution = "src/build.mjs -> f19-stealth-glider.html, a single self-contained file with no dependencies."
-verification = "src/verify1..10.mjs + VERIFICATION.md — 11 claims, each discharged by a named script."
+verification = "src/verify1..10.mjs + VERIFICATION.adoc — 11 claims, each discharged by a named script."
 
 [dependencies]
 runtime = []

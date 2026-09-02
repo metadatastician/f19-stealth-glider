@@ -30,7 +30,7 @@ can-create-files = true
 #   the project's standing falsifier, and it is a design failure, not a fix.
 # - Never re-derive the stream no-go lemma. It is CLOSED: 0/30 clean crossings,
 #   cause is geometry (15-unit spacing vs ~17-unit exclusion diameter), not
-#   phase. See verify8.mjs and VERIFICATION.md claim #4.
+#   phase. See verify8.mjs and VERIFICATION.adoc claim #4.
 # - Never relax `stamp` to clip or wrap on out-of-bounds. It throws on purpose;
 #   silent wrapping previously manufactured a phantom clean landing lane (D-06).
 #   Sweeps needing negative lanes must enlarge the grid and co-shift the whole
@@ -60,12 +60,12 @@ require-evidence-per-step = true
 allow-silent-skip = false
 require-rerun-after-fix = true
 release-claim-requires-hard-pass = true
-ledger-claims-require-named-script = true   # every VERIFICATION.md row cites a runnable script
+ledger-claims-require-named-script = true   # every VERIFICATION.adoc row cites a runnable script
 
 [automation-hooks]
-# on-enter:  Read 0-AI-MANIFEST.a2ml, then 6a2/STATE.a2ml, then VERIFICATION.md.
+# on-enter:  Read 0-AI-MANIFEST.a2ml, then 6a2/STATE.a2ml, then VERIFICATION.adoc.
 # on-change: If src/ changed, run `just test` (ledger + rebuild + reproducibility diff).
-#            If a claim changed, update VERIFICATION.md in the same commit.
+#            If a claim changed, update VERIFICATION.adoc in the same commit.
 #            If machine-readable/ changed, run `just contracts`.
 # on-commit: Sign off (git commit -s). Commit email must be the GitHub noreply
 #            address — pushing with a private email is blocked by GH007.

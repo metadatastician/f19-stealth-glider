@@ -21,10 +21,10 @@ rules = [
   { name = "no-runtime-dependencies", scope = "package.json", severity = "critical", notes = "No `dependencies` or `devDependencies` keys. Zero dependencies is a design property (D-08)." },
   { name = "contact-radius-unchanged", scope = "src/mission.mjs", pattern = "nearWorld\\(M, cells, 2\\)", severity = "critical", notes = "The shipped contact rule is Chebyshev radius 2. Widening it to overlap-only trips the standing falsifier — the crossing becomes learnable by feel and the substrate becomes scenery." },
   { name = "stamp-throws-on-oob", scope = "src/engine.mjs", pattern = "stamp out of bounds", severity = "critical", notes = "stamp() must throw, never clip or wrap. Silent wrapping manufactured a phantom clean landing lane (D-06)." },
-  { name = "level-frozen", scope = "src/level.mjs", severity = "warning", notes = "Geometry changes invalidate the entire ledger. Any edit here must be accompanied by a full re-run of verify1,2,3,8,9 and an updated VERIFICATION.md." },
+  { name = "level-frozen", scope = "src/level.mjs", severity = "warning", notes = "Geometry changes invalidate the entire ledger. Any edit here must be accompanied by a full re-run of verify1,2,3,8,9 and an updated VERIFICATION.adoc." },
   { name = "b3s23-purity", scope = "src/engine.mjs", severity = "warning", notes = "The step rule is born-on-3 / survive-on-2-or-3, applied uniformly. Flag any per-cell exception, entity table, or scripted mover." },
   { name = "bundle-freshness", severity = "warning", notes = "f19-stealth-glider.html must be byte-identical to a fresh `just build`. Flag commits touching src/ that leave it untouched." },
-  { name = "ledger-claim-has-script", scope = "VERIFICATION.md", severity = "warning", notes = "Every claim row must cite a script that exists in src/ and is runnable with plain `node`." },
+  { name = "ledger-claim-has-script", scope = "VERIFICATION.adoc", severity = "warning", notes = "Every claim row must cite a script that exists in src/ and is runnable with plain `node`." },
   { name = "root-metadata-placement", severity = "info", notes = "State/metadata belongs under machine-readable/, not the repo root (root holds only 0-AI-MANIFEST.a2ml + k9iser.toml)." },
 ]
 
@@ -38,7 +38,7 @@ translation-invariance = "Life is translation-invariant away from borders. Sweep
 prohibited-nondeterminism = "No unseeded RNG, no wall-clock reads, and no iteration-order dependence anywhere in engine.mjs or mission.mjs."
 
 [verification-semantics]
-ledger = "VERIFICATION.md"
+ledger = "VERIFICATION.adoc"
 cited-scripts = ["src/verify1.mjs", "src/verify2.mjs", "src/verify3.mjs", "src/verify8.mjs", "src/verify9.mjs", "src/build.mjs"]
 exploratory-scripts = ["src/verify4.mjs", "src/verify5.mjs", "src/verify6.mjs", "src/verify7.mjs", "src/verify10.mjs"]
 exploratory-semantics = "These are design searches. A 'no viable candidate' or MIA result is the FINDING, not a failure — they are deliberately excluded from the CI ledger and retained so the ruled-out search space stays visible."

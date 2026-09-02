@@ -6,28 +6,27 @@
 #   * anything listed here WITHOUT the '?' marker must exist, and its absence fails.
 # Git-ignored entries (node_modules/, tmp/, _site/) are not root entries.
 #
-# This repository predates the template's 2026-08 un-hide of machine-readable/,
-# so its metadata tree is the dotted `machine-readable/` and its README and
-# CHANGELOG are Markdown. They are recorded here as they ARE, not as the
-# template's current shape says they should be: migrating them is a separate
-# decision, and an allowlist must not paper over it.
+# Retrofitted to the template's current shape on 2026-09-02 (owner ruling):
+# the metadata tree is the un-hidden `machine-readable/` and the root
+# documents are AsciiDoc. Only .github/pull_request_template.md stays
+# Markdown, because GitHub recognises no other name for it.
 #
 # Format: one entry per line; '#' starts a comment; trailing '/' marks a directory;
 # '?' prefix = optional (permitted, not required); no prefix = required.
 
 # ─── Authority and documentation files ───────────────────────────────────────
-README.md                  # Markdown; pre-dates the estate AsciiDoc rule (see header)
-CHANGELOG.md               # as above
+README.adoc                  # AsciiDoc since 2026-09-02 (converted from Markdown, owner ruling)
+CHANGELOG.adoc               # as above
 AUDIT.adoc
 EXPLAINME.adoc
 AFFIRMATION.adoc           # dated/signed honesty snapshot (README/EXPLAINME/AFFIRMATION trio)
-ARCHITECTURE.md
-VERIFICATION.md            # the authoritative record of how each claim was established
-GOVERNANCE.md
+ARCHITECTURE.adoc
+VERIFICATION.adoc            # the authoritative record of how each claim was established
+GOVERNANCE.adoc
 MAINTAINERS.adoc
-CODE_OF_CONDUCT.md
-CONTRIBUTING.md
-SECURITY.md
+CODE_OF_CONDUCT.adoc
+CONTRIBUTING.adoc
+SECURITY.adoc
 CITATION.cff
 0-AI-MANIFEST.a2ml         # universal AI entry point
 LICENSE                    # AGPL-3.0-or-later: this repo's licence, not the template's MPL-2.0 default
@@ -52,6 +51,6 @@ assets/
 scripts/                   # contractiles.mjs + check-root-shape.sh
 
 # ─── Metadata and forge ──────────────────────────────────────────────────────
-machine-readable/         # dotted, pre-2026-08 layout (see header)
+machine-readable/         # un-hidden layout since 2026-09-02 (was .machine_readable/)
 .github/
 .well-known/

@@ -2,7 +2,7 @@
 # STATE.a2ml — F19 Stealth Glider
 #
 # Current project state, phase, and route to the next milestone.
-# Machine-readable snapshot; keep in sync with README.md and VERIFICATION.md.
+# Machine-readable snapshot; keep in sync with README.adoc and VERIFICATION.adoc.
 
 [metadata]
 project = "F19 Stealth Glider"
@@ -49,15 +49,15 @@ engine = { percent = 90, notes = "src/engine.mjs — B3/S23 step, RLE, 8 symmetr
 mission = { percent = 85, notes = "src/mission.mjs — player overlay, Chebyshev contact rule, sensors, trace accounting frozen at the hangar threshold, ambient stepping after mission end." }
 level = { percent = 100, notes = "src/level.mjs — FROZEN. Operation Nightstep v2 geometry; the single source of truth." }
 ui = { percent = 70, notes = "src/ui.js — browser render + input only; carries no gameplay truth." }
-verification = { percent = 95, notes = "11-claim ledger in VERIFICATION.md; verify1,2,3,8,9 + build cited and CI-enforced." }
+verification = { percent = 95, notes = "11-claim ledger in VERIFICATION.adoc; verify1,2,3,8,9 + build cited and CI-enforced." }
 bundle = { percent = 100, notes = "src/build.mjs emits the self-contained HTML and replays the witness on the transformed core; CI asserts byte-identity with the committed file." }
 
 [settled-questions]
 # Recorded here because they are CLOSED. Do not re-derive them.
 resolved = [
-  { question = "Is a p30 glider stream crossable at all under this geometry?", answer = "No — 0/30 clean crossings at every launch phase.", evidence = "src/verify8.mjs, VERIFICATION.md claim #4", cause = "Geometry, not phase: 15-unit glider spacing against a ~17-unit exclusion diameter, so no phase-gap is ever wide enough. Under a true cell-overlap rule with no proximity radius, 21/30 phases overlap outright and the remaining 9 pass only at Chebyshev-1, an adjacency that annihilates on the next generation." },
+  { question = "Is a p30 glider stream crossable at all under this geometry?", answer = "No — 0/30 clean crossings at every launch phase.", evidence = "src/verify8.mjs, VERIFICATION.adoc claim #4", cause = "Geometry, not phase: 15-unit glider spacing against a ~17-unit exclusion diameter, so no phase-gap is ever wide enough. Under a true cell-overlap rule with no proximity radius, 21/30 phases overlap outright and the remaining 9 pass only at Chebyshev-1, an adjacency that annihilates on the next generation." },
   { question = "Should the contact rule be relaxed to overlap-only to make the crossing passable?", answer = "No — that trips the standing falsifier.", evidence = "Design invariant; see 0-AI-MANIFEST.a2ml", cause = "Overlap-only makes the crossing learnable by feel, which converts the substrate into scenery and fails v0's premise. The route goes AROUND the stream instead." },
-  { question = "How many clean eater1 landing lanes exist?", answer = "Exactly one (lambda = 0).", evidence = "src/verify3.mjs, VERIFICATION.md claim #3", cause = "An earlier out-of-bounds `stamp` bug wrapped silently and produced a phantom second lane. `stamp` now throws; the corrected sweep shows one." },
+  { question = "How many clean eater1 landing lanes exist?", answer = "Exactly one (lambda = 0).", evidence = "src/verify3.mjs, VERIFICATION.adoc claim #3", cause = "An earlier out-of-bounds `stamp` bug wrapped silently and produced a phantom second lane. `stamp` now throws; the corrected sweep shows one." },
 ]
 
 [open-decisions]
