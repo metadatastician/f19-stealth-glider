@@ -31,7 +31,18 @@ const js = core + '\n\n' + ui;
 // check 1: syntax of the exact shipped script
 const bundlePath = tmpFile('.js');
 writeFileSync(bundlePath, js);
-execSync(`node --check ${bundlePath}`, { stdio: 'inherit' });
+// Syntax-check the exact shipped script WITHOUT executing it. `new Function`
+// compiles the body and throws SyntaxError on bad input -- precisely what
+// `node --check` did, but in-process. That matters: it needs no child runtime
+// and no `--check` flag (Bun has none), so this check is runtime-agnostic.
+// strip() above deletes every `import` line and the `export` keyword, so the
+// bundle is a classic script and `new Function` is an exact equivalent.
+try {
+  new Function(js);
+} catch (err) {
+  console.error(`bundle syntax check failed: ${err.message}`);
+  process.exit(1);
+}
 
 // check 2: the transformed CORE still flies the witness (same transform as shipped)
 const corePath = tmpFile('.mjs');
@@ -42,7 +53,10 @@ for (let t = 0; t < 1200 && !M.result; t++) missionStep(M, null);
 if (M.result !== 'LANDED' || M.trace !== 0) throw new Error('bundle smoke failed: ' + M.result + ' trace ' + M.trace);
 console.log('bundle core smoke: LANDED trace 0');
 `);
-execSync(`node ${corePath}`, { stdio: 'inherit' });
+// process.execPath re-invokes WHICHEVER runtime is executing this file.
+// Hardcoding `node` here made a runtime swap green and fake: the CI could be
+// switched to Bun while this line silently kept using the host's Node.
+execSync(`"${process.execPath}" "${corePath}"`, { stdio: 'inherit' });
 
 const css = `
 :root{color-scheme:dark}
